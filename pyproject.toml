@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+
+# Project metadata
+# ref: https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+#
+[project]
+name = "prometheus-dirsize-exporter"
+version = "3.2"
+dependencies = [
+    "prometheus-client",
+]
+authors = [
+  { name = "yuvipanda", email = "yuvipanda@gmail.com" },
+]
+license = { text = "BSD-3-Clause" }
+dynamic = ["readme"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+]
+
+[project.scripts]
+dirsize-exporter = "prometheus_dirsize_exporter.exporter:main"
+
+[project.urls]
+Homepage = "https://github.com/2i2c-org/prometheus-dirsize-reporter"
+Documentation = "https://github.com/2i2c-org/prometheus-dirsize-reporter#readme"
+Source = "https://github.com/2i2c-org/prometheus-dirsize-reporter"
+Tracker = "https://github.com/2i2c-org/prometheus-dirsize-reporter/issues"
+
+
+# Setuptools configuration
+# ref: https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html#setuptools-specific-configuration
+#
+[tool.setuptools]
+license-files = ["LICENSE"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = [""]
+include = ["prometheus_dirsize_exporter"]
+
+[tool.setuptools.dynamic]
+readme = { file = "README.md", content-type = "text/markdown" }
