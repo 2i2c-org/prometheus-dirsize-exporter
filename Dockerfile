@@ -6,4 +6,5 @@ ADD . /tmp/src
 
 RUN pip install /tmp/src
 
+ENV PYTHONUNBUFFERED=1
 ENTRYPOINT ["tini", "--"]
