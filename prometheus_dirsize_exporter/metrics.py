@@ -7,7 +7,8 @@ NAMESPACE = "dirsize"
 
 TOTAL_SIZE = Gauge(
     "total_size_bytes", "Total Size of the Directory (in bytes)", namespace=NAMESPACE,
-    labelnames=("directory",)
+    labelnames=("directory",),
+    registry=None # Don't register this metric, as it's optional
 )
 
 LATEST_MTIME = Gauge(
