@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 #
 [project]
 name = "prometheus-dirsize-exporter"
-version = "3.2"
+version = "3.3"
 dependencies = [
     "prometheus-client",
 ]
