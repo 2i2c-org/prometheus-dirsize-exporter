@@ -2,7 +2,7 @@ import os
 import time
 import argparse
 from typing import Callable, Never, Optional, Generator
-from prometheus_client import start_http_server
+from prometheus_client import REGISTRY, start_http_server
 from . import metrics
 from dataclasses import dataclass
 
@@ -191,6 +191,9 @@ def main() -> Never:
     )
 
     args = argparser.parse_args()
+
+    if not args.disable_total_size:
+        REGISTRY.register(metrics.TOTAL_SIZE)
 
     start_http_server(args.port)
     while True:
