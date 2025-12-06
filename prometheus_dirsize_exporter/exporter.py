@@ -183,6 +183,13 @@ def main() -> Never:
         "--port", help="Port for the server to listen on", type=int, default=8000
     )
 
+    argparser.add_argument(
+        "--disable-total-size",
+        help="Disable total size metric reporting",
+        action="store_true"
+
+    )
+
     args = argparser.parse_args()
 
     start_http_server(args.port)
@@ -191,7 +198,8 @@ def main() -> Never:
         for subdir_info in walker.get_subdirs_info(args.parent_dir):
             if subdir_info is None:
                 continue
-            metrics.TOTAL_SIZE.labels(subdir_info.path).set(subdir_info.size)
+            if not args.disable_total_size:
+                metrics.TOTAL_SIZE.labels(subdir_info.path).set(subdir_info.size)
             metrics.LATEST_MTIME.labels(subdir_info.path).set(subdir_info.latest_mtime)
             metrics.OLDEST_MTIME.labels(subdir_info.path).set(subdir_info.oldest_mtime)
             metrics.ENTRIES_COUNT.labels(subdir_info.path).set(
