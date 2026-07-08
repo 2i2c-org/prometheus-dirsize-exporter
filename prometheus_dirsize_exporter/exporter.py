@@ -1,3 +1,4 @@
+import errno
 import os
 import time
 import argparse
@@ -63,15 +64,23 @@ class BudgetedDirInfoWalker:
         start_time = time.monotonic()
         try:
             self_statinfo = os.stat(path)
+
+            # Get absolute path of all children of directory
+            children = [
+                os.path.abspath(os.path.join(path, c))
+                for c in self.do_iops_action(os.listdir, path)
+            ]
         except FileNotFoundError:
             # Directory was deleted from the time it was listed and now
             return None
-
-        # Get absolute path of all children of directory
-        children = [
-            os.path.abspath(os.path.join(path, c))
-            for c in self.do_iops_action(os.listdir, path)
-        ]
+        except OSError as e:
+            if e.errno == errno.EINVAL:
+                # See https://github.com/2i2c-org/prometheus-dirsize-exporter/issues/40
+                # A directory containing a unix domain socket accessed over NFS
+                # can raise EINVAL on listdir. Skip it rather than aborting.
+                return None
+            # Any other errors should just be propagated
+            raise
         # Split into files and directories for different kinds of traversal.
         # We count symlinks as files, but do not resolve them when checking size -
         # but do include them in the mtime calculation.
